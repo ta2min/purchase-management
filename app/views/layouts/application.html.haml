@@ -2,10 +2,25 @@
 %html
   %head
     %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
-    %title AppName
+    %title PurchaseManagement
     = csrf_meta_tags
     = csp_meta_tag
-    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
   %body
-    = yield
+    .app-title.navbar.navbar-expand-md.navbar-light.bg-light
+      .navbar-brand 購入管理
+
+      %ul.navbar-nav.ml-auto
+        - if current_user
+          %li.nav-item= link_to 'ユーザー', edit_user_registration_path, class: 'nav-link'
+          %li.nav-item= link_to 'ログアウト', destroy_user_session_path, method: :delete, class: 'nav-link'
+        - else
+          %li.nav-item= link_to 'ログイン', new_user_session_path, class: 'nav-link'
+    .container
+      - flash.each do |message_type, message|
+        %div{class: "alert alert-#{message_type}"}
+          = message
+      -# - if flash.notice.present?
+      -#   .alert.alert-success= flash.notice
+      = yield
